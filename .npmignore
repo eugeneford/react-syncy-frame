@@ -1,0 +1,16 @@
+#editor settings
+.idea
+.editorconfig
+
+#build tools
+.travis.yml
+
+#linters
+.eslintrc*
+
+#sources
+src
+
+#tests
+test
+coverage

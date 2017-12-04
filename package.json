@@ -1,0 +1,51 @@
+{
+  "name": "react-syncy-frame",
+  "version": "1.0.0",
+  "description": "Apply meaningful transitions to your IFrame",
+  "main": "dist/react-syncy-frame.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eugeneford/react-syncy-frame.git"
+  },
+  "scripts": {
+    "build": "webpack",
+    "build-watch": "webpack --watch",
+    "test": "karma start --single-run",
+    "test-watch": "karma start",
+    "lint": "eslint src/*.js src/*.jsx"
+  },
+  "keywords": [
+    "iframe",
+    "react",
+    "react-component"
+  ],
+  "author": "Eugene Ford",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.5.1",
+    "istanbul-instrumenter-loader": "^3.0.0",
+    "jasmine-core": "^2.7.0",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-coveralls": "^1.1.2",
+    "karma-jasmine": "^1.1.0",
+    "karma-webpack": "^2.0.6",
+    "react-test-renderer": "^16.2.0",
+    "webpack": "^3.9.1"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

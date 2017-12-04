@@ -7,7 +7,7 @@
 </h3>
 
 <p align="center">
-  Apply meaningful state transitions for your IFrame content
+  Apply meaningful transitions to your IFrame
 </p>
 
 <p align="center">
