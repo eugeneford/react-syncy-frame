@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
+		module.exports = factory(require("react"), require("prop-types"));
 	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
+		define(["react", "prop-types"], factory);
 	else if(typeof exports === 'object')
-		exports["SyncyFrame"] = factory(require("react"));
+		exports["SyncyFrame"] = factory(require("react"), require("prop-types"));
 	else
-		root["SyncyFrame"] = factory(root["react"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__) {
+		root["SyncyFrame"] = factory(root["react"], root["prop-types"]);
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,6 +81,12 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -90,7 +96,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _syncyFrame = __webpack_require__(2);
+var _syncyFrame = __webpack_require__(3);
 
 var _syncyFrame2 = _interopRequireDefault(_syncyFrame);
 
@@ -99,7 +105,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = _syncyFrame2.default;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -115,7 +121,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _frame = __webpack_require__(3);
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _frame = __webpack_require__(4);
 
 var _frame2 = _interopRequireDefault(_frame);
 
@@ -127,8 +137,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SyncyFrame = function (_React$Comment) {
-  _inherits(SyncyFrame, _React$Comment);
+var SyncyFrame = function (_React$Component) {
+  _inherits(SyncyFrame, _React$Component);
 
   function SyncyFrame() {
     _classCallCheck(this, SyncyFrame);
@@ -172,7 +182,7 @@ var SyncyFrame = function (_React$Comment) {
       this.props.onLoad(frameWindow);
     }
   }, {
-    key: 'renderFrame',
+    key: 'renderFrames',
     value: function renderFrame(display) {
       var _this2 = this;
 
@@ -205,14 +215,14 @@ var SyncyFrame = function (_React$Comment) {
       return _react2.default.createElement(
         'div',
         { className: 'syncy-frame' },
-        this.renderFrame(displayFirst),
-        this.renderFrame(displaySecond)
+        this.renderFrames(displayFirst),
+        this.renderFrames(displaySecond)
       );
     }
   }]);
 
   return SyncyFrame;
-}(_react2.default.Comment);
+}(_react2.default.Component);
 
 _frame2.default.defaultProps = {
   id: 'syncy-frame-instance',
@@ -221,16 +231,16 @@ _frame2.default.defaultProps = {
 };
 
 _frame2.default.propTypes = {
-  id: _react.PropTypes.string,
-  src: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]).isRequired,
-  onBeforeLoad: _react.PropTypes.func,
-  onLoad: _react.PropTypes.func
+  id: _propTypes2.default.string,
+  src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
+  onBeforeLoad: _propTypes2.default.func,
+  onLoad: _propTypes2.default.func
 };
 
 exports.default = SyncyFrame;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -245,6 +255,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -344,10 +358,10 @@ Frame.defaultProps = {
 };
 
 Frame.propTypes = {
-  id: _react.PropTypes.string,
-  src: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.object]).isRequired,
-  onBeforeLoad: _react.PropTypes.func,
-  onLoad: _react.PropTypes.func
+  id: _propTypes2.default.string,
+  src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
+  onBeforeLoad: _propTypes2.default.func,
+  onLoad: _propTypes2.default.func
 };
 
 exports.default = Frame;

@@ -9,7 +9,7 @@ module.exports = {
     libraryExport: 'default',
   },
 
-  externals: ['react', 'react-dom'],
+  externals: ['react', 'react-dom', 'prop-types'],
 
   module: {
     loaders: [{

@@ -12,7 +12,9 @@
     "build-watch": "webpack --watch",
     "test": "karma start --single-run",
     "test-watch": "karma start",
-    "lint": "eslint src/*.js src/*.jsx"
+    "lint": "eslint src/*.js src/*.jsx",
+    "demo-build": "webpack --config webpack.demo.config.js",
+    "demo-watch": "webpack --config webpack.demo.config.js --watch"
   },
   "keywords": [
     "iframe",
@@ -45,6 +47,7 @@
     "webpack": "^3.9.1"
   },
   "dependencies": {
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }

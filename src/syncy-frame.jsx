@@ -1,77 +1,101 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Frame from './frame';
 
-class SyncyFrame extends React.Comment {
-  constructor() {
+class SyncyFrame extends React.Component {
+  constructor(props) {
     super();
     this.state = {
-      display: 'first',
+      active: 0,
+      frames: [props.src, null],
     };
     this.onFrameBeforeLoad = this.onFrameBeforeLoad.bind(this);
     this.onFrameLoad = this.onFrameLoad.bind(this);
-    this.renderFrame = this.renderFrame.bind(this);
+    this.renderFrames = this.renderFrames.bind(this);
   }
 
-  componentWillReceiveProps({ nextId, nextSrc }) {
+  componentWillReceiveProps(nextProps) {
+    const nextId = nextProps.id;
+    const nextSrc = nextProps.src;
+    const { active, frames } = this.state;
     const { id, src } = this.props;
 
     if (id === nextId && src === nextSrc) {
       return;
     }
 
-    this.setState({ display: 'both' });
+    const nextFrames = [
+      active === 0 ? frames[0] : nextSrc,
+      active === 1 ? frames[1] : nextSrc,
+    ];
+
+    this.setState({
+      active: 'all',
+      frames: nextFrames
+    });
   }
 
-  onFrameBeforeLoad(frameWindow) {
-    this.props.onBeforeLoad(frameWindow);
+  onFrameBeforeLoad(iframe) {
+    this.props.onBeforeLoad(iframe);
   }
 
-  onFrameLoad(display, frameWindow) {
-    this.setState(display);
-    this.props.onLoad(frameWindow);
+  onFrameLoad(element, index) {
+    const { frames } = this.state;
+    const iframe = element;
+    const nextFrames = [
+      index === 0 ? frames[0] : null,
+      index === 1 ? frames[1] : null
+    ];
+
+    iframe.style.zIndex = 1;
+
+    this.setState({ active: index, frames: nextFrames });
+    this.props.onLoad(iframe.contentWindow);
   }
 
-  renderFrame(display) {
-    if (!display) {
-      return null;
-    }
+  renderFrames() {
+    const { active, frames } = this.state;
 
-    const { id, src } = this.props;
+    return frames.map((src, index) => {
+      if (active !== index && active !== 'all') { return null; }
 
-    return (
-      <Frame
-        id={id}
-        src={src}
-        onBeforeLoad={this.onFrameBeforeLoad()}
-        onLoad={frameWindow => this.onFrameLoad('first', frameWindow)}
-      />
-    );
+      const id = `syncy-frame-instance-${index}`;
+
+      return (
+        <Frame
+          id={id}
+          key={id}
+          src={src}
+          onBeforeLoad={this.onFrameBeforeLoad}
+          onLoad={iframe => this.onFrameLoad(iframe, index)}
+        />
+      );
+    });
   }
 
   render() {
-    const { display } = this.state;
-    const displayFirst = display === 'first' || display === 'both';
-    const displaySecond = display === 'second' || display === 'both';
+    const { width, height } = this.props;
 
     return (
-      <div className="syncy-frame">
-        {this.renderFrame(displayFirst)}
-        {this.renderFrame(displaySecond)}
+      <div className="syncy-frame" style={{ width, height }}>
+        {this.renderFrames()}
       </div>
     );
   }
 }
 
-Frame.defaultProps = {
-  id: 'syncy-frame-instance',
+SyncyFrame.defaultProps = {
+  width: 'auto',
+  height: 'auto',
   onBeforeLoad: function onBeforeLoad() {
   },
   onLoad: function onLoad() {
   },
 };
 
-Frame.propTypes = {
-  id: PropTypes.string,
+SyncyFrame.propTypes = {
+  width: PropTypes.string,
+  height: PropTypes.string,
   src: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,
