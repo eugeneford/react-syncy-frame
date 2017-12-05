@@ -5,9 +5,13 @@ import SyncyFrame from '../src/react-syncy-frame';
 class Container extends React.Component {
   constructor(){
     super();
+
+    const parser = new DOMParser();
+    const dom = parser.parseFromString('<h1>Hello World</h1>', 'text/html');
+
     this.state = {
       active: 0,
-      src: ['https://devitems.com/preview/furnish/index.html', 'https://livedemo00.template-help.com/wt_58888_v10/']
+      src: ['http://default.eugeneford.info/', dom]
     };
     this.changeSrc = this.changeSrc.bind(this);
   }
@@ -19,9 +23,10 @@ class Container extends React.Component {
 
   render() {
     const { src, active } = this.state;
+    const message = typeof src[active] === "string" ? 'Render DOM' : 'Render URL';
     return (
       <div>
-        <button onClick={this.changeSrc}>Render new Source</button>
+        <button onClick={this.changeSrc}>{message}</button>
         <SyncyFrame width={'480px'} height={'320px'} src={src[active]}/>
       </div>
     );

@@ -1024,9 +1024,12 @@ var Container = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).call(this));
 
+    var parser = new DOMParser();
+    var dom = parser.parseFromString('<h1>Hello World</h1>', 'text/html');
+
     _this.state = {
       active: 0,
-      src: ['https://devitems.com/preview/furnish/index.html', 'https://livedemo00.template-help.com/wt_58888_v10/']
+      src: ['http://default.eugeneford.info/', dom]
     };
     _this.changeSrc = _this.changeSrc.bind(_this);
     return _this;
@@ -1046,13 +1049,14 @@ var Container = function (_React$Component) {
           src = _state.src,
           active = _state.active;
 
+      var message = typeof src[active] === "string" ? 'Render DOM' : 'Render URL';
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(
           'button',
           { onClick: this.changeSrc },
-          'Render new Source'
+          message
         ),
         _react2.default.createElement(_reactSyncyFrame2.default, { width: '480px', height: '320px', src: src[active] })
       );
