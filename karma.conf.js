@@ -1,6 +1,6 @@
 var path = require('path');
 
-var reporters = process.env.TRAVIS ? ['progress', 'coverage', 'coveralls'] : ['progress', 'coverage'];
+var reporters = ['progress', 'coverage-istanbul'];
 var browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'];
 
 module.exports = function(config) {
@@ -8,12 +8,13 @@ module.exports = function(config) {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
-      'test/react-syncy-frame-specs.js'
+      'test/index.spec.js'
     ],
     preprocessors: {
-      'test/react-syncy-frame-specs.js': 'webpack'
+      'test/index.spec.js': 'webpack'
     },
     webpack: {
+      devtool: 'inline-source-map',
       module: {
         loaders: [{
             test: /\.jsx?$/,
@@ -33,11 +34,15 @@ module.exports = function(config) {
             exclude: /node_modules|\.spec\.jsx?$/,
           }
         ]
+      },
+      resolve: {
+        extensions: ['.js', '.jsx']
       }
     },
     reporters: reporters,
-    coverageReporter: {
-      type: 'lcov', dir: 'coverage/'
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcov'],
+      dir: path.join(__dirname, 'coverage')
     },
     port: 9876,
     customLaunchers: {

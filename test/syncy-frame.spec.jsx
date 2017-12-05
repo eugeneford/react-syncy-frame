@@ -1,7 +1,5 @@
-import './frame.spec.jsx';
-import './syncy-frame.spec.jsx';
-
-import SyncyFrame from '../src/index';
+import { mount } from 'enzyme';
+import SyncyFrame from '../src/syncy-frame';
 
 describe('SyncyFrame', function () {
   it('is defined', function () {
