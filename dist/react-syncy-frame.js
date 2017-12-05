@@ -140,25 +140,29 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SyncyFrame = function (_React$Component) {
   _inherits(SyncyFrame, _React$Component);
 
-  function SyncyFrame() {
+  function SyncyFrame(props) {
     _classCallCheck(this, SyncyFrame);
 
     var _this = _possibleConstructorReturn(this, (SyncyFrame.__proto__ || Object.getPrototypeOf(SyncyFrame)).call(this));
 
     _this.state = {
-      display: 'first'
+      active: 0,
+      frames: [props.src, null]
     };
     _this.onFrameBeforeLoad = _this.onFrameBeforeLoad.bind(_this);
     _this.onFrameLoad = _this.onFrameLoad.bind(_this);
-    _this.renderFrame = _this.renderFrame.bind(_this);
+    _this.renderFrames = _this.renderFrames.bind(_this);
     return _this;
   }
 
   _createClass(SyncyFrame, [{
     key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(_ref) {
-      var nextId = _ref.nextId,
-          nextSrc = _ref.nextSrc;
+    value: function componentWillReceiveProps(nextProps) {
+      var nextId = nextProps.id;
+      var nextSrc = nextProps.src;
+      var _state = this.state,
+          active = _state.active,
+          frames = _state.frames;
       var _props = this.props,
           id = _props.id,
           src = _props.src;
@@ -168,55 +172,71 @@ var SyncyFrame = function (_React$Component) {
         return;
       }
 
-      this.setState({ display: 'both' });
+      var nextFrames = [active === 0 ? frames[0] : nextSrc, active === 1 ? frames[1] : nextSrc];
+
+      this.setState({
+        active: 'all',
+        frames: nextFrames
+      });
     }
   }, {
     key: 'onFrameBeforeLoad',
-    value: function onFrameBeforeLoad(frameWindow) {
-      this.props.onBeforeLoad(frameWindow);
+    value: function onFrameBeforeLoad(iframe) {
+      this.props.onBeforeLoad(iframe);
     }
   }, {
     key: 'onFrameLoad',
-    value: function onFrameLoad(display, frameWindow) {
-      this.setState(display);
-      this.props.onLoad(frameWindow);
+    value: function onFrameLoad(element, index) {
+      var frames = this.state.frames;
+
+      var iframe = element;
+      var nextFrames = [index === 0 ? frames[0] : null, index === 1 ? frames[1] : null];
+
+      iframe.style.zIndex = 1;
+
+      this.setState({ active: index, frames: nextFrames });
+      this.props.onLoad(iframe.contentWindow);
     }
   }, {
     key: 'renderFrames',
-    value: function renderFrame(display) {
+    value: function renderFrames() {
       var _this2 = this;
 
-      if (!display) {
-        return null;
-      }
-
-      var _props2 = this.props,
-          id = _props2.id,
-          src = _props2.src;
+      var _state2 = this.state,
+          active = _state2.active,
+          frames = _state2.frames;
 
 
-      return _react2.default.createElement(_frame2.default, {
-        id: id,
-        src: src,
-        onBeforeLoad: this.onFrameBeforeLoad(),
-        onLoad: function onLoad(frameWindow) {
-          return _this2.onFrameLoad('first', frameWindow);
+      return frames.map(function (src, index) {
+        if (active !== index && active !== 'all') {
+          return null;
         }
+
+        var id = 'syncy-frame-instance-' + index;
+
+        return _react2.default.createElement(_frame2.default, {
+          id: id,
+          key: id,
+          src: src,
+          onBeforeLoad: _this2.onFrameBeforeLoad,
+          onLoad: function onLoad(iframe) {
+            return _this2.onFrameLoad(iframe, index);
+          }
+        });
       });
     }
   }, {
     key: 'render',
     value: function render() {
-      var display = this.state.display;
+      var _props2 = this.props,
+          width = _props2.width,
+          height = _props2.height;
 
-      var displayFirst = display === 'first' || display === 'both';
-      var displaySecond = display === 'second' || display === 'both';
 
       return _react2.default.createElement(
         'div',
-        { className: 'syncy-frame' },
-        this.renderFrames(displayFirst),
-        this.renderFrames(displaySecond)
+        { className: 'syncy-frame', style: { width: width, height: height } },
+        this.renderFrames()
       );
     }
   }]);
@@ -224,14 +244,16 @@ var SyncyFrame = function (_React$Component) {
   return SyncyFrame;
 }(_react2.default.Component);
 
-_frame2.default.defaultProps = {
-  id: 'syncy-frame-instance',
+SyncyFrame.defaultProps = {
+  width: 'auto',
+  height: 'auto',
   onBeforeLoad: function onBeforeLoad() {},
   onLoad: function onLoad() {}
 };
 
-_frame2.default.propTypes = {
-  id: _propTypes2.default.string,
+SyncyFrame.propTypes = {
+  width: _propTypes2.default.string,
+  height: _propTypes2.default.string,
   src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
   onBeforeLoad: _propTypes2.default.func,
   onLoad: _propTypes2.default.func
@@ -276,44 +298,17 @@ var Frame = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Frame.__proto__ || Object.getPrototypeOf(Frame)).call(this));
 
-    _this.initCallbacks = _this.initCallbacks.bind(_this);
     _this.injectDOM = _this.injectDOM.bind(_this);
     return _this;
   }
 
   _createClass(Frame, [{
     key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(_ref) {
-      var nextId = _ref.nextId,
-          nextSrc = _ref.nextSrc;
-      var _props = this.props,
-          id = _props.id,
-          src = _props.src;
+    value: function shouldComponentUpdate(nextProps) {
+      var nextSrc = nextProps.src;
+      var src = this.props.src;
 
-      return id !== nextId || src !== nextSrc;
-    }
-  }, {
-    key: 'initCallbacks',
-    value: function initCallbacks(iframe) {
-      var element = iframe;
-      var contentWindow = element.contentWindow;
-      var _props2 = this.props,
-          src = _props2.src,
-          onBeforeLoad = _props2.onBeforeLoad,
-          onLoad = _props2.onLoad;
-
-
-      onBeforeLoad(contentWindow);
-
-      // Inject DOM if src is not a string
-      if (src && typeof src !== 'string') {
-        this.injectDOM(contentWindow);
-      }
-
-      contentWindow.addEventListener('load', function () {
-        onLoad(contentWindow);
-        element.style.zIndex = 1;
-      });
+      return src !== nextSrc;
     }
   }, {
     key: 'injectDOM',
@@ -327,23 +322,46 @@ var Frame = function (_React$Component) {
       document.close();
     }
   }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var iframe = this.iframe;
+      var contentWindow = iframe.contentWindow;
+      var _props = this.props,
+          src = _props.src,
+          onBeforeLoad = _props.onBeforeLoad;
+
+
+      onBeforeLoad(iframe);
+
+      // Inject DOM if src is not a string
+      if (src && typeof src !== 'string') {
+        this.injectDOM(contentWindow);
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      var _props3 = this.props,
-          id = _props3.id,
-          src = _props3.src;
+      var _this2 = this;
+
+      var _props2 = this.props,
+          id = _props2.id,
+          src = _props2.src,
+          _onLoad = _props2.onLoad;
 
       var srcLink = typeof src === 'string' ? src : 'about:blank';
-      var key = id + '_' + new Date().getTime();
 
       return _react2.default.createElement('iframe', {
-        key: key,
         id: id,
         title: id,
         src: srcLink,
-        ref: this.initCallbacks,
+        ref: function ref(iframe) {
+          return _this2.iframe = iframe;
+        },
         className: 'syncy-frame-window',
-        allowFullScreen: 'true'
+        allowFullScreen: 'true',
+        onLoad: function onLoad() {
+          return _onLoad(_this2.iframe);
+        }
       });
     }
   }]);
@@ -352,7 +370,7 @@ var Frame = function (_React$Component) {
 }(_react2.default.Component);
 
 Frame.defaultProps = {
-  id: 'frame-instance',
+  id: 'syncy-frame-instance',
   onBeforeLoad: function onBeforeLoad() {},
   onLoad: function onLoad() {}
 };
