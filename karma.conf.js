@@ -30,7 +30,7 @@ module.exports = function(config) {
               options: { esModules: true }
             },
             enforce: 'post',
-            exclude: /node_modules|-specs\.js$/,
+            exclude: /node_modules|\.spec\.jsx?$/,
           }
         ]
       }

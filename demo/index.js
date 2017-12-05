@@ -1004,9 +1004,9 @@ var _reactDom = __webpack_require__(19);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reactSyncyFrame = __webpack_require__(28);
+var _index = __webpack_require__(28);
 
-var _reactSyncyFrame2 = _interopRequireDefault(_reactSyncyFrame);
+var _index2 = _interopRequireDefault(_index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1058,7 +1058,7 @@ var Container = function (_React$Component) {
           { onClick: this.changeSrc },
           message
         ),
-        _react2.default.createElement(_reactSyncyFrame2.default, { width: '480px', height: '320px', src: src[active] })
+        _react2.default.createElement(_index2.default, { width: '480px', height: '320px', src: src[active] })
       );
     }
   }]);

@@ -2,7 +2,7 @@
   "name": "react-syncy-frame",
   "version": "1.0.0",
   "description": "Apply meaningful transitions to your IFrame",
-  "main": "dist/react-syncy-frame.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/eugeneford/react-syncy-frame.git"

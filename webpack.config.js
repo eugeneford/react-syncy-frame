@@ -1,9 +1,9 @@
 path = require('path');
 
 module.exports = {
-  entry: './src/react-syncy-frame',
+  entry: './src/index',
   output: {
-    filename: './dist/react-syncy-frame.js',
+    filename: './dist/index.js',
     library: 'SyncyFrame',
     libraryTarget: 'umd',
     libraryExport: 'default',

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SyncyFrame from '../src/react-syncy-frame';
+import SyncyFrame from '../src/index';
 
 class Container extends React.Component {
   constructor(){
