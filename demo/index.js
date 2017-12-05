@@ -18430,17 +18430,14 @@ var SyncyFrame = function (_React$Component) {
   _createClass(SyncyFrame, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var nextId = nextProps.id;
       var nextSrc = nextProps.src;
       var _state = this.state,
           active = _state.active,
           frames = _state.frames;
-      var _props = this.props,
-          id = _props.id,
-          src = _props.src;
+      var src = this.props.src;
 
 
-      if (id === nextId && src === nextSrc) {
+      if (src === nextSrc) {
         return;
       }
 
@@ -18500,9 +18497,9 @@ var SyncyFrame = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props2 = this.props,
-          width = _props2.width,
-          height = _props2.height;
+      var _props = this.props,
+          width = _props.width,
+          height = _props.height;
 
 
       return _react2.default.createElement(
@@ -19190,6 +19187,23 @@ var Frame = function (_React$Component) {
   }
 
   _createClass(Frame, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var iframe = this.iframe;
+      var contentWindow = iframe.contentWindow;
+      var _props = this.props,
+          src = _props.src,
+          onBeforeLoad = _props.onBeforeLoad;
+
+
+      onBeforeLoad(iframe);
+
+      // Inject DOM if src is not a string
+      if (src && typeof src !== 'string') {
+        this.injectDOM(contentWindow);
+      }
+    }
+  }, {
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps) {
       var nextSrc = nextProps.src;
@@ -19209,23 +19223,6 @@ var Frame = function (_React$Component) {
       document.close();
     }
   }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var iframe = this.iframe;
-      var contentWindow = iframe.contentWindow;
-      var _props = this.props,
-          src = _props.src,
-          onBeforeLoad = _props.onBeforeLoad;
-
-
-      onBeforeLoad(iframe);
-
-      // Inject DOM if src is not a string
-      if (src && typeof src !== 'string') {
-        this.injectDOM(contentWindow);
-      }
-    }
-  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -19242,12 +19239,12 @@ var Frame = function (_React$Component) {
         title: id,
         src: srcLink,
         ref: function ref(iframe) {
-          return _this2.iframe = iframe;
+          _this2.iframe = iframe;
         },
         className: 'syncy-frame-window',
         allowFullScreen: 'true',
         onLoad: function onLoad() {
-          return _onLoad(_this2.iframe);
+          _onLoad(_this2.iframe);
         }
       });
     }

@@ -7,6 +7,19 @@ class Frame extends React.Component {
     this.injectDOM = this.injectDOM.bind(this);
   }
 
+  componentDidMount() {
+    const { iframe } = this;
+    const { contentWindow } = iframe;
+    const { src, onBeforeLoad } = this.props;
+
+    onBeforeLoad(iframe);
+
+    // Inject DOM if src is not a string
+    if (src && typeof src !== 'string') {
+      this.injectDOM(contentWindow);
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     const nextSrc = nextProps.src;
     const { src } = this.props;
@@ -22,19 +35,6 @@ class Frame extends React.Component {
     document.close();
   }
 
-  componentDidMount() {
-    const iframe = this.iframe;
-    const { contentWindow } = iframe;
-    const { src, onBeforeLoad } = this.props;
-
-    onBeforeLoad(iframe);
-
-    // Inject DOM if src is not a string
-    if (src && typeof src !== 'string') {
-      this.injectDOM(contentWindow);
-    }
-  }
-
   render() {
     const { id, src, onLoad } = this.props;
     const srcLink = typeof src === 'string' ? src : 'about:blank';
@@ -43,10 +43,10 @@ class Frame extends React.Component {
       id={id}
       title={id}
       src={srcLink}
-      ref={iframe => this.iframe = iframe}
+      ref={(iframe) => { this.iframe = iframe; }}
       className="syncy-frame-window"
       allowFullScreen="true"
-      onLoad={()=> onLoad(this.iframe)}
+      onLoad={() => { onLoad(this.iframe); }}
     />);
   }
 }

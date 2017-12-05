@@ -15,12 +15,11 @@ class SyncyFrame extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextId = nextProps.id;
     const nextSrc = nextProps.src;
     const { active, frames } = this.state;
-    const { id, src } = this.props;
+    const { src } = this.props;
 
-    if (id === nextId && src === nextSrc) {
+    if (src === nextSrc) {
       return;
     }
 
@@ -31,7 +30,7 @@ class SyncyFrame extends React.Component {
 
     this.setState({
       active: 'all',
-      frames: nextFrames
+      frames: nextFrames,
     });
   }
 
@@ -44,7 +43,7 @@ class SyncyFrame extends React.Component {
     const iframe = element;
     const nextFrames = [
       index === 0 ? frames[0] : null,
-      index === 1 ? frames[1] : null
+      index === 1 ? frames[1] : null,
     ];
 
     iframe.style.zIndex = 1;
