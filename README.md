@@ -15,10 +15,10 @@
     <img src="https://travis-ci.org/eugeneford/react-syncy-frame.svg?branch=master" alt="Build Status">
   </a>
   <a href='https://coveralls.io/github/eugeneford/react-syncy-frame'>
-    <img src='https://coveralls.io/repos/github/eugeneford/react-syncy-frame/badge.svg' alt='Coverage Status' />
+    <img src='https://coveralls.io/repos/github/eugeneford/react-syncy-frame/badge.svg?v=1' alt='Coverage Status' />
   </a>
   <a href='https://www.npmjs.com/package/react-syncy-frame'>
-    <img src='https://img.shields.io/npm/v/react-syncy-frame.svg' alt='NPM Version' />
+    <img src='https://img.shields.io/npm/v/react-syncy-frame.svg?v=1' alt='NPM Version' />
   </a>
 </p>
 
