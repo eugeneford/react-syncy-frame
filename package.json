@@ -1,6 +1,6 @@
 {
   "name": "react-syncy-frame",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Apply meaningful transitions to your IFrame",
   "main": "dist/index.js",
   "repository": {
