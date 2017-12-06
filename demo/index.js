@@ -18464,7 +18464,7 @@ var SyncyFrame = function (_React$Component) {
       iframe.style.zIndex = 1;
 
       this.setState({ active: index, frames: nextFrames });
-      this.props.onLoad(iframe.contentWindow);
+      this.props.onLoad(iframe);
     }
   }, {
     key: 'renderFrames',
