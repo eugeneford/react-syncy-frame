@@ -1,6 +1,11 @@
-#editor settings
+#general
+node_modules
 .idea
 .editorconfig
+.github
+.gitignore
+.editorconfig
+.eslintrc.js
 
 #build tools
 .travis.yml
@@ -8,9 +13,17 @@
 #linters
 .eslintrc*
 
+#demo
+demo
+webpack.demo.config.js
+
 #sources
 src
+webpack.config.js
+.babelrc
 
 #tests
 test
 coverage
+karma.conf.js
+.coveralls.yml
