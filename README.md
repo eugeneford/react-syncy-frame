@@ -55,7 +55,7 @@ export default () => {
 };
 ```
 
-*Side note: dont forget to include css styles.*
+*Side note: dont forget to include css/style.css styles.*
 
 ## Props
 Property | Type | Description
