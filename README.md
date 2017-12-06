@@ -61,8 +61,8 @@ Property | Type | Description
 src | String or DocumentNode | Target url or document which needs to be rendered. Required.
 width | String | SyncyFrame width. Can be set in any css units eg. px, vw, vh, % etc. Auto by default.
 height | String | SyncyFrame height. Can be set in any css units eg. px, vw, vh, % etc. Auto by default.
-onBeforeLoad | function | Callback which gets called before target iframe is loaded
-onLoad | function | Callback which gets called once target iframe is loaded
+onBeforeLoad | function | Callback which gets called before target iframe is loaded. Receives an iframe element as an argument.
+onLoad | function | Callback which gets called once target iframe is loaded. Receives an iframe element as an argument.
 
 ## Contributing
 Contributions are always welcome.
