@@ -46,17 +46,21 @@ class SyncyFrame extends React.Component {
       index === 1 ? frames[1] : null,
     ];
 
-    iframe.style.zIndex = 1;
-
-    this.setState({ active: index, frames: nextFrames });
-    this.props.onLoad(iframe);
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      iframe.style.zIndex = 1;
+      this.setState({ active: index, frames: nextFrames });
+      this.props.onLoad(iframe);
+    }, this.props.transitionDelay);
   }
 
   renderFrames() {
     const { active, frames } = this.state;
 
     return frames.map((src, index) => {
-      if (active !== index && active !== 'all') { return null; }
+      if (active !== index && active !== 'all') {
+        return null;
+      }
 
       const id = `syncy-frame-instance-${index}`;
 
@@ -86,6 +90,7 @@ class SyncyFrame extends React.Component {
 SyncyFrame.defaultProps = {
   width: 'auto',
   height: 'auto',
+  transitionDelay: 0,
   onBeforeLoad: function onBeforeLoad() {
   },
   onLoad: function onLoad() {
@@ -95,6 +100,7 @@ SyncyFrame.defaultProps = {
 SyncyFrame.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
+  transitionDelay: PropTypes.number,
   src: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,

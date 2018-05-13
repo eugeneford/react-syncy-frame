@@ -11,7 +11,7 @@ class Container extends React.Component {
 
     this.state = {
       active: 0,
-      src: ['http://default.eugeneford.info/', dom]
+      src: ['http://eugeneford.info/', dom]
     };
     this.changeSrc = this.changeSrc.bind(this);
   }
@@ -27,7 +27,7 @@ class Container extends React.Component {
     return (
       <div>
         <button onClick={this.changeSrc}>{message}</button>
-        <SyncyFrame width={'480px'} height={'320px'} src={src[active]}/>
+        <SyncyFrame width={'480px'} height={'320px'} transitionDelay={1000} src={src[active]}/>
       </div>
     );
   }

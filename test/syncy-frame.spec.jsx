@@ -29,10 +29,14 @@ describe('SyncyFrame', function () {
     expect(SyncyFrame.prototype.render).toHaveBeenCalledTimes(1);
   });
 
-  it('new src in second frame while if first is active', () => {
+  it('new src in second frame while if first is active', (done) => {
     const url = 'http://default.eugeneford.info/';
     const nextUrl = 'http://test.eugeneford.info/';
-    const wrapper = shallow(<SyncyFrame src={url}/>);
+    const wrapper = shallow(<SyncyFrame src={url} onLoad={() => {
+      expect(wrapper.state('active')).toEqual(1);
+      expect(wrapper.state('frames')).toEqual([null, nextUrl]);
+      done();
+    }}/>);
 
     wrapper.setState({ active: 0, frames: ['http://default.eugeneford.info/', null] });
     wrapper.setProps({ src: nextUrl });
@@ -40,16 +44,17 @@ describe('SyncyFrame', function () {
     const frame = wrapper.findWhere(n => n.prop('src') === nextUrl);
 
     frame.simulate('load', { style: {} }, 0);
-
-    expect(wrapper.state('active')).toEqual(1);
-    expect(wrapper.state('frames')).toEqual([null, nextUrl]);
   });
 
 
-  it('new src in first frame while if second is active', () => {
+  it('new src in first frame while if second is active', (done) => {
     const url = 'http://default.eugeneford.info/';
     const nextUrl = 'http://test.eugeneford.info/';
-    const wrapper = shallow(<SyncyFrame src={url}/>);
+    const wrapper = shallow(<SyncyFrame src={url} onLoad={() => {
+      expect(wrapper.state('active')).toEqual(0);
+      expect(wrapper.state('frames')).toEqual([nextUrl, null]);
+      done();
+    }}/>);
 
     wrapper.setState({ active: 1, frames: [null, 'http://default.eugeneford.info/'] });
     wrapper.setProps({ src: nextUrl });
@@ -57,9 +62,6 @@ describe('SyncyFrame', function () {
     const frame = wrapper.findWhere(n => n.prop('src') === nextUrl);
 
     frame.simulate('load', { style: {} }, 0);
-
-    expect(wrapper.state('active')).toEqual(0);
-    expect(wrapper.state('frames')).toEqual([nextUrl, null]);
   });
 
   it('onBeforeLoad is called', function () {
@@ -73,14 +75,15 @@ describe('SyncyFrame', function () {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('onLoad is called', function () {
+  it('onLoad is called', function (done) {
     const url = 'http://default.eugeneford.info/';
-    const spy = jasmine.createSpy();
+    const spy = jasmine.createSpy().and.callFake(() => {
+      expect(spy).toHaveBeenCalled();
+      done();
+    });
     const wrapper = shallow(<SyncyFrame src={url} onLoad={spy}/>);
     const frame = wrapper.find(Frame);
 
     frame.simulate('load', { style: {} }, 0);
-
-    expect(spy).toHaveBeenCalled();
   });
 });

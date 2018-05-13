@@ -184,20 +184,24 @@ var SyncyFrame = function (_React$Component) {
   }, {
     key: 'onFrameLoad',
     value: function onFrameLoad(element, index) {
+      var _this2 = this;
+
       var frames = this.state.frames;
 
       var iframe = element;
       var nextFrames = [index === 0 ? frames[0] : null, index === 1 ? frames[1] : null];
 
-      iframe.style.zIndex = 1;
-
-      this.setState({ active: index, frames: nextFrames });
-      this.props.onLoad(iframe);
+      clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
+        iframe.style.zIndex = 1;
+        _this2.setState({ active: index, frames: nextFrames });
+        _this2.props.onLoad(iframe);
+      }, this.props.transitionDelay);
     }
   }, {
     key: 'renderFrames',
     value: function renderFrames() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _state2 = this.state,
           active = _state2.active,
@@ -215,9 +219,9 @@ var SyncyFrame = function (_React$Component) {
           id: id,
           key: id,
           src: src,
-          onBeforeLoad: _this2.onFrameBeforeLoad,
+          onBeforeLoad: _this3.onFrameBeforeLoad,
           onLoad: function onLoad(iframe) {
-            return _this2.onFrameLoad(iframe, index);
+            return _this3.onFrameLoad(iframe, index);
           }
         });
       });
@@ -244,6 +248,7 @@ var SyncyFrame = function (_React$Component) {
 SyncyFrame.defaultProps = {
   width: 'auto',
   height: 'auto',
+  transitionDelay: 0,
   onBeforeLoad: function onBeforeLoad() {},
   onLoad: function onLoad() {}
 };
@@ -251,6 +256,7 @@ SyncyFrame.defaultProps = {
 SyncyFrame.propTypes = {
   width: _propTypes2.default.string,
   height: _propTypes2.default.string,
+  transitionDelay: _propTypes2.default.number,
   src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
   onBeforeLoad: _propTypes2.default.func,
   onLoad: _propTypes2.default.func
