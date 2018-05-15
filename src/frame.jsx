@@ -20,12 +20,6 @@ class Frame extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const nextSrc = nextProps.src;
-    const { src } = this.props;
-    return src !== nextSrc;
-  }
-
   injectDOM(contentWindow) {
     const { document } = contentWindow;
     const dom = this.props.src;
@@ -36,15 +30,16 @@ class Frame extends React.Component {
   }
 
   render() {
-    const { id, src, onLoad } = this.props;
+    const { id, src, onLoad, className } = this.props;
     const srcLink = typeof src === 'string' ? src : 'about:blank';
+    const frameClass = className ? 'syncy-frame-window ' + className : 'syncy-frame-window';
 
     return (<iframe
       id={id}
       title={id}
       src={srcLink}
       ref={(iframe) => { this.iframe = iframe; }}
-      className="syncy-frame-window"
+      className={frameClass}
       allowFullScreen="true"
       onLoad={() => { onLoad(this.iframe); }}
     />);
@@ -53,6 +48,7 @@ class Frame extends React.Component {
 
 Frame.defaultProps = {
   id: 'syncy-frame-instance',
+  className: '',
   onBeforeLoad: function onBeforeLoad() {
   },
   onLoad: function onLoad() {
@@ -61,6 +57,7 @@ Frame.defaultProps = {
 
 Frame.propTypes = {
   id: PropTypes.string,
+  className: PropTypes.string,
   src: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.object,

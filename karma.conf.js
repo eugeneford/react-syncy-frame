@@ -1,7 +1,7 @@
 var path = require('path');
 
 var reporters = ['progress', 'coverage-istanbul'];
-var browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : ['Chrome'];
+var browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : ['ChromeHeadless'];
 
 module.exports = function(config) {
   config.set({

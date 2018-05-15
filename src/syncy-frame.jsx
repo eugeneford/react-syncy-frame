@@ -29,6 +29,7 @@ class SyncyFrame extends React.Component {
     ];
 
     this.setState({
+      freeze: active,
       active: 'all',
       frames: nextFrames,
     });
@@ -48,14 +49,17 @@ class SyncyFrame extends React.Component {
 
     clearTimeout(this.timer);
     this.timer = setTimeout(() => {
-      iframe.style.zIndex = 1;
-      this.setState({ active: index, frames: nextFrames });
+      this.setState({
+        active: index,
+        activeHeight: iframe.offsetHeight,
+        frames: nextFrames,
+      });
       this.props.onLoad(iframe);
     }, this.props.transitionDelay);
   }
 
   renderFrames() {
-    const { active, frames } = this.state;
+    const { active, frames, freeze } = this.state;
 
     return frames.map((src, index) => {
       if (active !== index && active !== 'all') {
@@ -63,10 +67,14 @@ class SyncyFrame extends React.Component {
       }
 
       const id = `syncy-frame-instance-${index}`;
+      const isActive = active === index ? 'active ' : '';
+      const isFreeze = freeze === index ? 'freeze' : '';
+
 
       return (
         <Frame
           id={id}
+          className={isActive + isFreeze}
           key={id}
           src={src}
           onBeforeLoad={this.onFrameBeforeLoad}
@@ -78,9 +86,11 @@ class SyncyFrame extends React.Component {
 
   render() {
     const { width, height } = this.props;
+    const { activeHeight, active } = this.state;
+    let syncyHeight = active === 'all' ? activeHeight : height;
 
     return (
-      <div className="syncy-frame" style={{ width, height }}>
+      <div className="syncy-frame" style={{ width, height: syncyHeight }}>
         {this.renderFrames()}
       </div>
     );

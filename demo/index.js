@@ -1025,7 +1025,7 @@ var Container = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).call(this));
 
     var parser = new DOMParser();
-    var dom = parser.parseFromString('<h1>Hello World</h1>', 'text/html');
+    var dom = parser.parseFromString('<html style="background: #0f0;"><h1>Hello World</h1></html>', 'text/html');
 
     _this.state = {
       active: 0,
@@ -1055,10 +1055,14 @@ var Container = function (_React$Component) {
         null,
         _react2.default.createElement(
           'button',
-          { onClick: this.changeSrc },
+          { style: { height: 48, position: "fixed", top: 30, right: 30 }, onClick: this.changeSrc },
           message
         ),
-        _react2.default.createElement(_index2.default, { width: '480px', height: '320px', transitionDelay: 1000, src: src[active] })
+        _react2.default.createElement(
+          'div',
+          { style: { display: "inline-block", padding: 4, background: '#f00' } },
+          _react2.default.createElement(_index2.default, { width: '480px', height: '320px', transitionDelay: 1000, src: src[active] })
+        )
       );
     }
   }]);
@@ -18444,6 +18448,7 @@ var SyncyFrame = function (_React$Component) {
       var nextFrames = [active === 0 ? frames[0] : nextSrc, active === 1 ? frames[1] : nextSrc];
 
       this.setState({
+        freeze: active,
         active: 'all',
         frames: nextFrames
       });
@@ -18465,8 +18470,11 @@ var SyncyFrame = function (_React$Component) {
 
       clearTimeout(this.timer);
       this.timer = setTimeout(function () {
-        iframe.style.zIndex = 1;
-        _this2.setState({ active: index, frames: nextFrames });
+        _this2.setState({
+          active: index,
+          activeHeight: iframe.offsetHeight,
+          frames: nextFrames
+        });
         _this2.props.onLoad(iframe);
       }, this.props.transitionDelay);
     }
@@ -18477,7 +18485,8 @@ var SyncyFrame = function (_React$Component) {
 
       var _state2 = this.state,
           active = _state2.active,
-          frames = _state2.frames;
+          frames = _state2.frames,
+          freeze = _state2.freeze;
 
 
       return frames.map(function (src, index) {
@@ -18486,9 +18495,12 @@ var SyncyFrame = function (_React$Component) {
         }
 
         var id = 'syncy-frame-instance-' + index;
+        var isActive = active === index ? 'active ' : '';
+        var isFreeze = freeze === index ? 'freeze' : '';
 
         return _react2.default.createElement(_frame2.default, {
           id: id,
+          className: isActive + isFreeze,
           key: id,
           src: src,
           onBeforeLoad: _this3.onFrameBeforeLoad,
@@ -18504,11 +18516,15 @@ var SyncyFrame = function (_React$Component) {
       var _props = this.props,
           width = _props.width,
           height = _props.height;
+      var _state3 = this.state,
+          activeHeight = _state3.activeHeight,
+          active = _state3.active;
 
+      var syncyHeight = active === 'all' ? activeHeight : height;
 
       return _react2.default.createElement(
         'div',
-        { className: 'syncy-frame', style: { width: width, height: height } },
+        { className: 'syncy-frame', style: { width: width, height: syncyHeight } },
         this.renderFrames()
       );
     }
@@ -19210,14 +19226,6 @@ var Frame = function (_React$Component) {
       }
     }
   }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps) {
-      var nextSrc = nextProps.src;
-      var src = this.props.src;
-
-      return src !== nextSrc;
-    }
-  }, {
     key: 'injectDOM',
     value: function injectDOM(contentWindow) {
       var document = contentWindow.document;
@@ -19236,9 +19244,11 @@ var Frame = function (_React$Component) {
       var _props2 = this.props,
           id = _props2.id,
           src = _props2.src,
-          _onLoad = _props2.onLoad;
+          _onLoad = _props2.onLoad,
+          className = _props2.className;
 
       var srcLink = typeof src === 'string' ? src : 'about:blank';
+      var frameClass = className ? 'syncy-frame-window ' + className : 'syncy-frame-window';
 
       return _react2.default.createElement('iframe', {
         id: id,
@@ -19247,7 +19257,7 @@ var Frame = function (_React$Component) {
         ref: function ref(iframe) {
           _this2.iframe = iframe;
         },
-        className: 'syncy-frame-window',
+        className: frameClass,
         allowFullScreen: 'true',
         onLoad: function onLoad() {
           _onLoad(_this2.iframe);
@@ -19261,12 +19271,14 @@ var Frame = function (_React$Component) {
 
 Frame.defaultProps = {
   id: 'syncy-frame-instance',
+  className: '',
   onBeforeLoad: function onBeforeLoad() {},
   onLoad: function onLoad() {}
 };
 
 Frame.propTypes = {
   id: _propTypes2.default.string,
+  className: _propTypes2.default.string,
   src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
   onBeforeLoad: _propTypes2.default.func,
   onLoad: _propTypes2.default.func

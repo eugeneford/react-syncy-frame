@@ -7,11 +7,11 @@ class Container extends React.Component {
     super();
 
     const parser = new DOMParser();
-    const dom = parser.parseFromString('<h1>Hello World</h1>', 'text/html');
+    const dom = parser.parseFromString('<html style="background: #0f0;"><h1>Hello World</h1></html>', 'text/html');
 
     this.state = {
       active: 0,
-      src: ['http://eugeneford.info/', dom]
+      src: ['http://eugeneford.info/', dom],
     };
     this.changeSrc = this.changeSrc.bind(this);
   }
@@ -26,8 +26,10 @@ class Container extends React.Component {
     const message = typeof src[active] === "string" ? 'Render DOM' : 'Render URL';
     return (
       <div>
-        <button onClick={this.changeSrc}>{message}</button>
-        <SyncyFrame width={'480px'} height={'320px'} transitionDelay={1000} src={src[active]}/>
+        <button style={{height: 48, position: "fixed", top: 30, right: 30}} onClick={this.changeSrc}>{message}</button>
+        <div style={{ display: "inline-block", padding: 4, background: '#f00' }}>
+          <SyncyFrame width={'480px'} height={'320px'} transitionDelay={1000} src={src[active]}/>
+        </div>
       </div>
     );
   }
