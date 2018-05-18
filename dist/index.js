@@ -149,6 +149,8 @@ var SyncyFrame = function (_React$Component) {
       active: 0,
       frames: [props.src, null]
     };
+
+    _this.onDocumentFetch = _this.onDocumentFetch.bind(_this);
     _this.onFrameBeforeLoad = _this.onFrameBeforeLoad.bind(_this);
     _this.onFrameLoad = _this.onFrameLoad.bind(_this);
     _this.renderFrames = _this.renderFrames.bind(_this);
@@ -176,6 +178,11 @@ var SyncyFrame = function (_React$Component) {
         active: 'all',
         frames: nextFrames
       });
+    }
+  }, {
+    key: 'onDocumentFetch',
+    value: function onDocumentFetch(frameDocument) {
+      this.props.onDocumentFetch(frameDocument);
     }
   }, {
     key: 'onFrameBeforeLoad',
@@ -230,7 +237,8 @@ var SyncyFrame = function (_React$Component) {
           onBeforeLoad: _this3.onFrameBeforeLoad,
           onLoad: function onLoad(iframe) {
             return _this3.onFrameLoad(iframe, index);
-          }
+          },
+          onDocumentFetch: _this3.onDocumentFetch
         });
       });
     }
@@ -262,7 +270,8 @@ SyncyFrame.defaultProps = {
   height: 'auto',
   transitionDelay: 0,
   onBeforeLoad: function onBeforeLoad() {},
-  onLoad: function onLoad() {}
+  onLoad: function onLoad() {},
+  onDocumentFetch: function onDocumentFetch() {}
 };
 
 SyncyFrame.propTypes = {
@@ -271,7 +280,8 @@ SyncyFrame.propTypes = {
   transitionDelay: _propTypes2.default.number,
   src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
   onBeforeLoad: _propTypes2.default.func,
-  onLoad: _propTypes2.default.func
+  onLoad: _propTypes2.default.func,
+  onDocumentFetch: _propTypes2.default.func
 };
 
 exports.default = SyncyFrame;
@@ -338,23 +348,27 @@ var Frame = function (_React$Component) {
     key: 'injectDOM',
     value: function injectDOM(contentWindow) {
       var document = contentWindow.document;
+      var _props2 = this.props,
+          onDocumentFetch = _props2.onDocumentFetch,
+          src = _props2.src;
 
-      var dom = this.props.src;
 
       document.open();
-      document.write(dom.documentElement.outerHTML);
+      document.write(src.documentElement.outerHTML);
       document.close();
+
+      onDocumentFetch(document);
     }
   }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var _props2 = this.props,
-          id = _props2.id,
-          src = _props2.src,
-          _onLoad = _props2.onLoad,
-          className = _props2.className;
+      var _props3 = this.props,
+          id = _props3.id,
+          src = _props3.src,
+          _onLoad = _props3.onLoad,
+          className = _props3.className;
 
       var srcLink = typeof src === 'string' ? src : 'about:blank';
       var frameClass = className ? 'syncy-frame-window ' + className : 'syncy-frame-window';
@@ -382,7 +396,8 @@ Frame.defaultProps = {
   id: 'syncy-frame-instance',
   className: '',
   onBeforeLoad: function onBeforeLoad() {},
-  onLoad: function onLoad() {}
+  onLoad: function onLoad() {},
+  onDocumentFetch: function onDocumentFetch() {}
 };
 
 Frame.propTypes = {
@@ -390,7 +405,8 @@ Frame.propTypes = {
   className: _propTypes2.default.string,
   src: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.object]).isRequired,
   onBeforeLoad: _propTypes2.default.func,
-  onLoad: _propTypes2.default.func
+  onLoad: _propTypes2.default.func,
+  onDocumentFetch: _propTypes2.default.func
 };
 
 exports.default = Frame;

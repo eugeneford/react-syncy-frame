@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import SyncyFrame from '../src/syncy-frame';
 import Frame from '../src/frame';
@@ -73,6 +74,21 @@ describe('SyncyFrame', function () {
     frame.simulate('beforeLoad');
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it('onDocumentFetch is called', function (done) {
+    const root = document.createElement('div');
+    document.body.appendChild(root);
+
+    const parser = new DOMParser();
+    const html = '<h1>Hello World</h1>';
+    const dom = parser.parseFromString(html, 'text/html');
+    const spy = jasmine.createSpy().and.callFake(() => {
+      expect(spy).toHaveBeenCalled();
+      document.body.removeChild(root);
+      done();
+    });
+    ReactDOM.render(<SyncyFrame src={dom} onDocumentFetch={spy}/>, root);
   });
 
   it('onLoad is called', function (done) {

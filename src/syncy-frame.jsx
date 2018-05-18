@@ -9,6 +9,8 @@ class SyncyFrame extends React.Component {
       active: 0,
       frames: [props.src, null],
     };
+
+    this.onDocumentFetch = this.onDocumentFetch.bind(this);
     this.onFrameBeforeLoad = this.onFrameBeforeLoad.bind(this);
     this.onFrameLoad = this.onFrameLoad.bind(this);
     this.renderFrames = this.renderFrames.bind(this);
@@ -33,6 +35,10 @@ class SyncyFrame extends React.Component {
       active: 'all',
       frames: nextFrames,
     });
+  }
+
+  onDocumentFetch(frameDocument) {
+    this.props.onDocumentFetch(frameDocument);
   }
 
   onFrameBeforeLoad(iframe) {
@@ -79,6 +85,7 @@ class SyncyFrame extends React.Component {
           src={src}
           onBeforeLoad={this.onFrameBeforeLoad}
           onLoad={iframe => this.onFrameLoad(iframe, index)}
+          onDocumentFetch={this.onDocumentFetch}
         />
       );
     });
@@ -105,6 +112,8 @@ SyncyFrame.defaultProps = {
   },
   onLoad: function onLoad() {
   },
+  onDocumentFetch: function onDocumentFetch() {
+  },
 };
 
 SyncyFrame.propTypes = {
@@ -117,6 +126,7 @@ SyncyFrame.propTypes = {
   ]).isRequired,
   onBeforeLoad: PropTypes.func,
   onLoad: PropTypes.func,
+  onDocumentFetch: PropTypes.func,
 };
 
 

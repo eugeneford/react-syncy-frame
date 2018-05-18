@@ -22,11 +22,13 @@ class Frame extends React.Component {
 
   injectDOM(contentWindow) {
     const { document } = contentWindow;
-    const dom = this.props.src;
+    const { onDocumentFetch, src } = this.props;
 
     document.open();
-    document.write(dom.documentElement.outerHTML);
+    document.write(src.documentElement.outerHTML);
     document.close();
+
+    onDocumentFetch(document);
   }
 
   render() {
@@ -38,10 +40,14 @@ class Frame extends React.Component {
       id={id}
       title={id}
       src={srcLink}
-      ref={(iframe) => { this.iframe = iframe; }}
+      ref={(iframe) => {
+        this.iframe = iframe;
+      }}
       className={frameClass}
       allowFullScreen="true"
-      onLoad={() => { onLoad(this.iframe); }}
+      onLoad={() => {
+        onLoad(this.iframe);
+      }}
     />);
   }
 }
@@ -52,6 +58,8 @@ Frame.defaultProps = {
   onBeforeLoad: function onBeforeLoad() {
   },
   onLoad: function onLoad() {
+  },
+  onDocumentFetch: function onDocumentFetch() {
   },
 };
 
@@ -64,6 +72,7 @@ Frame.propTypes = {
   ]).isRequired,
   onBeforeLoad: PropTypes.func,
   onLoad: PropTypes.func,
+  onDocumentFetch: PropTypes.func,
 };
 
 export default Frame;

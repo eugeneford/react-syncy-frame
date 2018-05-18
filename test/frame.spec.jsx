@@ -6,17 +6,17 @@ describe('Frame', () => {
   const parser = new DOMParser();
   let root;
 
-  beforeEach(()=>{
+  beforeEach(() => {
     root = document.createElement('div');
     root.setAttribute('id', 'root');
     document.body.appendChild(root);
   });
 
-  afterEach(()=>{
+  afterEach(() => {
     document.body.removeChild(root);
   });
 
-  it('dom is rendered', ()=> {
+  it('dom is rendered', () => {
     const html = '<h1>Hello World</h1>';
     const dom = parser.parseFromString(html, 'text/html');
 
@@ -29,7 +29,7 @@ describe('Frame', () => {
     expect(frameDocument.body.innerHTML).toEqual(html);
   });
 
-  it('didnt update with the same src', ()=> {
+  it('didnt update with the same src', () => {
     const html = '<h1>Hello World</h1>';
     const dom = parser.parseFromString(html, 'text/html');
     const spy = jasmine.createSpy();
@@ -40,7 +40,7 @@ describe('Frame', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('custom id is applied', ()=> {
+  it('custom id is applied', () => {
     const html = '<h1>Hello World</h1>';
     const dom = parser.parseFromString(html, 'text/html');
 
@@ -51,7 +51,7 @@ describe('Frame', () => {
     expect(iframe).toBeDefined();
   });
 
-  it('onBeforeLoad is called', ()=> {
+  it('onBeforeLoad is called', () => {
     const html = '<h1>Hello World</h1>';
     const dom = parser.parseFromString(html, 'text/html');
     const spy = jasmine.createSpy();
@@ -63,7 +63,19 @@ describe('Frame', () => {
     expect(spy).toHaveBeenCalledWith(iframe);
   });
 
-  it('onLoad is called', ()=> {
+  it('onDocumentFetch is called', () => {
+    const html = '<h1>Hello World</h1>';
+    const dom = parser.parseFromString(html, 'text/html');
+    const spy = jasmine.createSpy();
+
+    ReactDOM.render(<Frame src={dom} onDocumentFetch={spy}/>, document.getElementById('root'));
+
+    const iframe = document.getElementById('syncy-frame-instance');
+
+    expect(spy).toHaveBeenCalledWith(iframe.contentDocument);
+  });
+
+  it('onLoad is called', () => {
     const html = '<h1>Hello World</h1>';
     const dom = parser.parseFromString(html, 'text/html');
     const spy = jasmine.createSpy();
@@ -75,7 +87,7 @@ describe('Frame', () => {
     expect(spy).toHaveBeenCalledWith(iframe);
   });
 
-  it('url is rendered', (done)=> {
+  it('url is rendered', (done) => {
     const url = 'http://default.eugeneford.info/';
     const testLocation = (iframe) => {
       const { src } = iframe;

@@ -65,6 +65,7 @@ width | String | SyncyFrame width. Can be set in any css units eg. px, vw, vh, %
 height | String | SyncyFrame height. Can be set in any css units eg. px, vw, vh, % etc. Auto by default.
 transitionDelay | Number | Delay time between syncy frame src transition. 
 onBeforeLoad | function | Callback which gets called before target iframe is loaded. Receives an iframe element as an argument.
+onDocumentFetch | function | Callback to be called once document is fetched into the iframe. Gets called between onBeforeLoad and onLoad.
 onLoad | function | Callback which gets called once target iframe is loaded. Receives an iframe element as an argument.
 
 ## Contributing
